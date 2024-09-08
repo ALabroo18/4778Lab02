@@ -74,7 +74,43 @@ public class EnemyBehaviourEditor : Editor
                 {
                     GUI.backgroundColor = Color.red;
                 }*/
+
+                foreach (var enemy in GameObject.FindObjectsOfType<EnemyBehaviour>(true))
+                {
+                    Undo.RecordObject(enemy.gameObject, "Disable/Enable enemy");
+                    enemy.gameObject.SetActive(!enemy.gameObject.activeSelf);
+                }
+
+                serializedObject.Update();
+
+                var health = serializedObject.FindProperty("health");
+                var attackPt = serializedObject.FindProperty("attackPt");
+
+                EditorGUILayout.PropertyField(health);
+                EditorGUILayout.PropertyField(attackPt);
+
+                serializedObject.ApplyModifiedProperties();
+
+                using (var changeScope = new EditorGUI.ChangeCheckScope())
+                {
+                    var temp = EditorGUILayout.Slider("Health", health.floatValue, 0, 10);
+
+                    if(changeScope.changed)
+                    {
+                        health.floatValue = temp;
+                    }
+                }
+
+                if (health.floatValue < 0)
+                {
+                    EditorGUILayout.HelpBox("...", MessageType.Warning);
+                }
             }
+
+            
+
+            
+
 
             
 
@@ -89,7 +125,7 @@ public class EnemyBehaviourEditor : Editor
 
         }
 
-
+        
 
 
 
