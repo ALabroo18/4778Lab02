@@ -6,4 +6,5 @@ public class EnemyBehaviour : MonoBehaviour
 {
     public float health;
     public float attackPt;
+    public float size;
 }
